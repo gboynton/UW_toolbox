@@ -1,24 +1,38 @@
-function err = fitFunction(var,funName,params,freeList,origVarargin)
-%err = fitFunction(var,funName,params,freeList,origVarargin)
+function [err] = fitFunction(var, funName, params, freeList, origVarargin)
+% [err] = fitFunction(var, funName, params, freeList, origVarargin)
 %
-%Support function for 'fit.m'
-%Written by G.M Boynton
+% Evaluates the error value at minimum for the given 'funName' with 
+% 'params' parameters. Support function for 'fit.m' & 'fitcon.m'
+%
+% Inputs:
+%   var               Values used to calculate the error value, stored into
+%                     'params' structure under field names (in order) from
+%                     'freeList'
+% 
+%   funName           Name of function to be optimized, string
+% 
+%   params            Structure of parameter values for 'funName'
+% 
+%   freeList          Cell array containing list of parameter names,
+%                     (strings)
+% 
+%   origVarargin      Extra variables to be sent into 'funName' after 
+%                     'params'
+%
+% Output:
+%   err               Error value at minimum, numeric
 
-%stick values of var into params
+% Written by G.M Boynton, Summer of '00
+% Edited by Kelly Chang, February 10, 2017
 
-params = var2params(var,params,freeList);
+%% Calling Specified Function to be Fitted
 
-%evaluate the function
+% stick values of var into params
+params = var2params(var, params, freeList);
 
-evalStr = sprintf('err = %s(params',funName);
-for i=1:length(origVarargin)
-  evalStr= [evalStr,',origVarargin{',num2str(i),'}'];
-end
-evalStr = [evalStr,');'];
-eval(evalStr);
+% organize evaluation string for origVarargin 
+tmp = arrayfun(@(x) sprintf('origVarargin{%d}',x), 1:length(origVarargin), ...
+    'UniformOutput', false);
 
-% if isfield(params,'plot')
-%     if params.plot == 1
-%         updateUI(2,'all');
-%     end
-% end
+% evaluate the function
+err = eval(sprintf('%s(params,%s);', funName, strjoin(tmp, ',')));

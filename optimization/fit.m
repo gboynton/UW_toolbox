@@ -1,59 +1,59 @@
-function [params,err] = fit(funName,params,freeList,varargin)
-%[params,err] = fit(funName,params,freeList,var1,var2,var3,...)
+function [params,err] = fit(funName, params, freeList, varargin)
+% [params,err] = fit(funName, params, freeList, var1, var2, var3,...)
 %
-%Helpful interface to matlab's 'fminsearch' function.
+% Helpful interface to matlab's 'fminsearch' function.
 %
-%INPUTS
-% 'funName':  function to be optimized.  Must have form err = <funName>(params,var1,var2,...)
-% params   :  structure of parameter values for fitted function
-%     params.options :  options for fminsearch program (see OPTIMSET)
-% freeList :  Cell array containing list of parameter names (strings) to be free in fi
-% var<n>   :  extra variables to be sent into fitted function
+% Inputs:
+%   funName        Function to be optimized. Must have form 
+%                  [err] = <funName>(params, var1, var2, ...)
+% 
+%   params         A structure of with field names with corresponding 
+%                  parameter values for fitted function. 'freeList'
+%                  parameters must only have a singular value per parameter
+%       options    A structure with pptions for fminsearch program 
+%                  (see OPTIMSET)
+% 
+%   freeList       Cell array containing list of parameter names (strings)
+%                  to be free in fitting
+% 
+%   var<n>         Extra variables to be sent into fitted function
 %
-%OUTPUTS
-% params   :  structure for best fitting parameters 
-% err      :  error value at minimum
-%
-%See 'FitDemo.m' for an example.
-%
-%Written by Geoffrey M. Boynton, Summer of '00
+% Outputs:
+%   params         A structure with best fitting parameters as fieldnames
+% 
+%   err            Error value at minimum, numeric
+% 
+% Notes: 
+% - Dependencies: params2var.m, var2params.m, fitFunction.m
 
+% Written by Geoffrey M. Boynton, Summer of '00
+% Edited by Kelly Chang, February 10, 2017
 
-%turn free parameters in to 'var'
-if isfield(params,'options')
-  options = params.options;
-else
-  options = [];
+%% Input Control
+
+options = []; % options for fminsearch (see OPTIMSET)
+if isfield(params, 'options')
+    options = params.options;
 end
-
 
 if isempty(freeList)
-  freeList = fieldnames(params);
+    freeList = fieldnames(params);
 end
 
-vars = params2var(params,freeList);
+%% Fit Function and Calculate Final Error
 
-if ~isfield(params,'shutup')
-  disp(sprintf('Fitting "%s" with %d free parameters.',funName,length(vars)));
-end
+% turn free parameters in to 'var'
+vars = params2var(params, freeList);
 
-vars = fminsearch('fitFunction',vars,options,funName,params,freeList,varargin);
+% calling fminsearch
+vars = fminsearch('fitFunction', vars, options, funName, params, freeList, varargin);
 
-%get final parameters
-params=  var2params(vars,params,freeList);
+% assign final parameters into 'params'
+params = var2params(vars, params, freeList);
 
-%evaluate the function
+% organize evaluation string for 'varargin' of 'funName'
+tmp = arrayfun(@(x) sprintf('varargin{%d}',x), 1:length(varargin), ...
+    'UniformOutput', false);
 
-evalStr = sprintf('err = %s(params',funName);
-for i=1:length(varargin)
-  evalStr= [evalStr,',varargin{',num2str(i),'}'];
-end
-evalStr = [evalStr,');'];
-eval(evalStr);
-
-
-
-
-
-
-
+% evaluate the function 'funName' for error at minimum
+err = eval(sprintf('%s(params,%s);', funName, strjoin(tmp, ',')));
