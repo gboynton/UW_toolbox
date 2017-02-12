@@ -13,8 +13,10 @@ This is a work in progress. Functions that are in reasonable shape are described
 Backwards compatibility
 
 nonanean - removed, use Matlab's nanmean instead
+
 nonanstd - removed, use Matlab's nanstd instead
-nonansem - moved to misc folder
+
+nonansem - renamed nansem and moved to misc folder
 
 
 
