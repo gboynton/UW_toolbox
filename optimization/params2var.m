@@ -25,7 +25,7 @@ if ischar(freeList)
     freeList = {freeList};
 end
 
-if ~all(ismember(freeList, fieldnames(freeList)))
+if ~all(ismember(freeList, fieldnames(params)))
     errFlds = setdiff(fieldnames(params), freeList);
     error('Unknown ''freeList'' parameters: %s', strjoin(errFlds, ', '));
 end
