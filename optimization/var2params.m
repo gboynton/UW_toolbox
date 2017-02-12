@@ -1,14 +1,39 @@
-function params = var2params(var,params,freeList)
-%params = var2params(var,params,freeList)
+function [params] = var2params(var, params, freeList)
+% [params] = var2params(var, params, freeList)
 %
-%Support function for 'fit.m'
-%Written by G.M Boynton, Summer of '00
+% Support function for 'fit.m'. Turns values 'var' into a field within
+% 'param' with a field name given in order from 'freeList'.
+%
+% Inputs:
+%   var         New values to be stored in the 'params' structure under
+%               field names (in order) from 'freeList'
+% 
+%   params      A structure of parameter values with field names that
+%               correspond with the parameter names in 'freeList'
+% 
+%   freeList    Cell array containing list of parameter names (strings)
+%               that match the field names in 'params'
+%
+% Output:
+%   params      Same 'params' structure with parameter values as field 
+%               names that correspond with the parameter names in 
+%               'freeList' with the values from 'var'
 
-count = 1;
-for i=1:length(freeList)
-  evalStr = sprintf('len = length(params.%s);',char(freeList(i)));
-  eval(evalStr);
-  evalStr = sprintf('params.%s =  var([%d:%d]);',char(freeList(i)),count,count+len-1);
-  eval(evalStr);
-  count = count+len;
+% Written by G.M. Boynton - Summer of '00
+% Edited by Kelly Chang - June 21, 2016
+
+%% Input Control
+
+if ischar(freeList)
+    freeList = {freeList};
+end
+
+if length(freeList) ~= length(var)
+    error('Length of ''var'' must equal length of ''freeList''');
+end
+
+%% Transforms 'var' into Structure 'params'
+
+for i = 1:length(freeList)
+    params.(freeList{i}) = var(i);
 end

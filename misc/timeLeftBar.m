@@ -1,13 +1,38 @@
-function timeLeftBar(h,i,n,str)
-% timeLeftBar(h,i,n,[str])
+function timeLeftBar(rep,maxrep,message)
+% TIMELEFTBAR Display time based wait bar
+% timeLeftBar(rep,maxrep,message) creates and displays
+% a variant of waitbar that is in real time
+% rep should be the rep value in the loop
+% maxrep should be the maximum value for the loop
+%
+%  Example: 
+% maxreps=1000
+% for i=1:maxreps
+% === computation here === %
+%   rand(2000);
+%   timeLeftBar( i,maxreps,'message')
+% end
+%     
+% written by Geoffrey M. Boynton. Edited Ione Fine
 
-if ~exist('str','var')
-    str = 'Time left:';
+handle = findobj(allchild(0),'flat','Tag','TMWWaitbar');
+if isempty(handle)
+    handle=waitbar(1);
+    tic
 end
 
-timeLeft = toc*(n-i)/i;  % seconds
+if rep>maxrep
+    if rep==maxrep+1
+        warndlg('timeLeftBar: rep number > maxrep number');
+    end
+    return
+end
+if ~exist('message','var')
+    message = 'Time left:';
+end
 
- 
+timeLeft = toc*(maxrep-rep)/rep;  % seconds
+
 if timeLeft<60 %less than a minute
     timeLeftStr = sprintf('%d sec',floor(timeLeft));
 elseif timeLeft <60*60  %between one minute and an hour
@@ -17,7 +42,7 @@ else %more than an hour (show hours and minutes)
         floor(floor(mod(timeLeft,3600)/60)));
 end
 
-waitbar(i/n,h,sprintf('%s %s',str,timeLeftStr));
-if i==n
-    delete(h)
+waitbar(rep/maxrep,handle,sprintf('%s %s',message,timeLeftStr));
+if rep==maxrep
+    delete(handle)
 end
