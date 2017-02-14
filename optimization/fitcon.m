@@ -58,9 +58,11 @@ vars = fmincon('fitFunction',vars,[],[],[],[],lb,ub,[],options,funName,params,va
 % assign final parameters into 'params'
 params = var2params(vars, params, varList);
 
-% organize evaluation string for 'varargin' of 'funName'
-tmp = arrayfun(@(x) sprintf('varargin{%d}',x), 1:length(varargin), ...
-    'UniformOutput', false);
-
-% evaluate the function 'funName' for error at minimum
-err = eval(sprintf('%s(params,%s);', funName, strjoin(tmp, ',')));
+if ~isempty(varargin)
+    tmp = arrayfun(@(x) sprintf('varargin{%d}',x), 1:length(varargin), ...
+        'UniformOutput', false); % organize evaluation string for 'varargin' of 'funName'
+    % evaluate the function 'funName' for error at minimum
+    err = eval(sprintf('%s(params,%s);', funName, strjoin(tmp, ',')));
+else
+    err = eval(sprintf('%s(params);', funName));
+end
