@@ -51,11 +51,5 @@ vars = fminsearch('fitFunction', vars, options, funName, params, freeList, varar
 % assign final parameters into 'params'
 params = var2params(vars, params, freeList);
 
-if ~isempty(varargin)
-    tmp = arrayfun(@(x) sprintf('varargin{%d}',x), 1:length(varargin), ...
-        'UniformOutput', false); % organize evaluation string for 'varargin' of 'funName'
-    % evaluate the function 'funName' for error at minimum
-    err = eval(sprintf('%s(params,%s);', funName, strjoin(tmp, ',')));
-else
-    err = eval(sprintf('%s(params);', funName));
-end
+% evaluate the function 'funName' for error at minimum
+err = fitFunction(vars, funName, params, freeList, varargin);
