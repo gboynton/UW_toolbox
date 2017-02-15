@@ -59,4 +59,9 @@ vars = fmincon('fitFunction',vars,[],[],[],[],lb,ub,[],options,funName,params,va
 params = var2params(vars, params, varList);
 
 % evaluate the function 'funName' for error at minimum
-err = fitFunction(vars, funName, params, varList, varargin);
+if ~isempty(tmp)
+err = eval(sprintf('%s(params,%s);', funName, strjoin(tmp, ',')));
+else
+    err = eval(sprintf('%s(params);', funName));
+end
+

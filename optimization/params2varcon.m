@@ -62,5 +62,8 @@ for i = 1:length(freeList)
     lb(i) = eval(order{1});
     ub(i) = eval(order{2});
     varStr{i} = eval(order{3});
+    if isfield(params,varStr{i})
     var(i) = params.(varStr{i});
+    else
+        error(sprintf('No field'));
 end
