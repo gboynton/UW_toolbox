@@ -11,7 +11,7 @@ function [params,err] = fitcon(funName, params, freeList, varargin)
 %                  parameter values for fitted function. 'freeList'
 %                  parameters must only have a singular value per parameter
 %       options    A structure with options for fminsearch program
-%                  (defaults: 'MaxFunEvals', 1e6, 'Display', off; 
+%                  (defaults: 'MaxFunEvals', 1e6, 'Display', off;
 %                  see OPTIMSET)
 %
 %   freeList       Cell array containing list of parameter names (strings)
@@ -58,9 +58,5 @@ vars = fmincon('fitFunction',vars,[],[],[],[],lb,ub,[],options,funName,params,va
 % assign final parameters into 'params'
 params = var2params(vars, params, varList);
 
-% organize evaluation string for 'varargin' of 'funName'
-tmp = arrayfun(@(x) sprintf('varargin{%d}',x), 1:length(varargin), ...
-    'UniformOutput', false);
-
 % evaluate the function 'funName' for error at minimum
-err = eval(sprintf('%s(params,%s);', funName, strjoin(tmp, ',')));
+err = fitFunction(vars, funName, params, varList, varargin);
