@@ -52,4 +52,9 @@ vars = fminsearch('fitFunction', vars, options, funName, params, freeList, varar
 params = var2params(vars, params, freeList);
 
 % evaluate the function 'funName' for error at minimum
-err = fitFunction(vars, funName, params, freeList, varargin);
+if ~isempty(tmp)    
+    err = eval(sprintf('%s(params,%s);', funName, strjoin(tmp, ',')));
+else
+    err = eval(sprintf('%s(params);', funName));
+end
+
