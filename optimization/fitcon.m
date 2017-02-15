@@ -63,4 +63,10 @@ tmp = arrayfun(@(x) sprintf('varargin{%d}',x), 1:length(varargin), ...
     'UniformOutput', false);
 
 % evaluate the function 'funName' for error at minimum
+if ~isempty(tmp)
 err = eval(sprintf('%s(params,%s);', funName, strjoin(tmp, ',')));
+else
+    err = eval(sprintf('%s(params);', funName));
+
+end
+
