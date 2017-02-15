@@ -2,7 +2,7 @@
 
 
 
-%addpath('../');  
+% addpath('../');  
 
 
 %
@@ -17,12 +17,11 @@
 % Where a = 1 and b = 100 by default. 
 % The minimum is zero at x = a, y = a^2 
 
-
 p.x = -1;
 p.y = 2;
 f = rosenbrock(p);
 
-disp(sprintf('f(%g,%g) = %g',p.x,p.y,f));
+fprintf('f(%g,%g) = %g\n', p.x, p.y, f);
 
 %% Visualize the function as a surface in 2d
 
@@ -38,7 +37,7 @@ surf(psurf.x(1,:),psurf.y(:,1),f);
 shading interp
 view(-40,20);
 
-xlabel('x')
+xlabel('x');
 ylabel('y');
 
 %%
@@ -56,24 +55,27 @@ colormap(cmap);
 % structure that we want to be allowed to vary.  These are listed in a cell
 % array of strings:
 
-freeParams = {'x','y'};
+freeParams = {'x', 'y'};
 
-pBest = fit('rosenbrock',p,freeParams);
-fBest = rosenbrock(pBest);
+[pBest,fBest] = fit('rosenbrock', p, freeParams);
 
-disp(sprintf('The minimum of the Rosenbrock is %g at (%g,%g)',fBest,pBest.x,pBest.y));
+fprintf('The minimum of the Rosenbrock is %g at (%g,%g)\n', ...
+    fBest, pBest.x, pBest.y);
 
 %%
 % Within rounding error, the minimum should be zero at (1,1)
 
 % Here's the location of the minimum on the plot of the surface:
-plot3(pBest.x,pBest.y,fBest,'ko','MarkerFaceColor','g');
+plot3(pBest.x, pBest.y, fBest, 'ko', 'MarkerFaceColor', 'g');
 
 %%
-fitcon('rosenbrock',p,{'x>2','y'})
-fitcon('rosenbrock',p,{'x>2','0<y<.5'})
-fitcon('rosenbrock',p,{'x>3'})
-fitcon('rosenbrock',p,{'y<0'})
-fitcon('rosenbrock',p,{'z<0'})
+% Use 'fitcon.m' to find the minimum, but the parameter search will be 
+% constrained by inequalities passed through in the freeList
 
+[pCon,fCon] = fitcon('rosenbrock', p, {'x>2', 'y'});
+% [pCon,fCon] = fitcon('rosenbrock', p, {'x>2', '0<y<.5'});
+% [pCon,fCon] = fitcon('rosenbrock', p, {'x>3'});
+% [pCon,fCon] = fitcon('rosenbrock', p, {'y<0'});
 
+% Here's the location of the constained minimum on the plot of the surface:
+plot3(pCon.x, pCon.y, fCon, 'ko', 'MarkerFaceColor', 'y');

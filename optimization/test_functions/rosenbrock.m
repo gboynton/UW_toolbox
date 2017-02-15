@@ -18,7 +18,7 @@ function f = rosenbrock(p,a,b)
 % f(x, y) = (a-x)^2 + b(y-x^2)^2
 % It has a global minimum at (x, y)=(a, a^2), where f(x, y)=0. 
 %
-% Written by gmb 7/717/2015
+% Written by gmb 7/17/2015
 
 if ~exist('a','var')
     a = 1;
