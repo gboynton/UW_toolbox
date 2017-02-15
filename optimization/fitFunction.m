@@ -31,17 +31,10 @@ function [err] = fitFunction(var, funName, params, freeList, origVarargin)
 params = var2params(var, params, freeList);
 
 % organize evaluation string for origVarargin
-tmp = arrayfun(@(x) sprintf('origVarargin{%d}',x), 1:length(origVarargin), ...
-    'UniformOutput', false);
-
-% evaluate the function
-
-if ~isempty(tmp)
-    
-    err = eval(sprintf('%s(params,%s);', funName, strjoin(tmp, ',')));
+if ~isempty(origVarargin)
+    tmp = arrayfun(@(x) sprintf('origVarargin{%d}',x), 1:length(origVarargin), ...
+        'UniformOutput', false); % organize evaluation string for origVarargin
+    err = eval(sprintf('%s(params,%s);', funName, strjoin(tmp, ','))); % evaluate the function
 else
     err = eval(sprintf('%s(params);', funName));
 end
-
-
-
