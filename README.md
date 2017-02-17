@@ -22,11 +22,10 @@ nonansem - renamed nansem, moved to misc folder and made compatible with Matlab'
 
 ---
 
-# Creator
+# Contributors
 
-Geoffrey Boynton - @gboynton 
-
-# Editors
+Creator: Geoffrey Boynton - @gboynton 
 
 Ione Fine - @ionefine - ionefine@uw.edu
+
 Kelly Chang - @kellychang4 - kchang4@uw.edu
