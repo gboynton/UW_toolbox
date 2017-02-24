@@ -1,4 +1,0 @@
-function asdf
-
-Screen('CloseAll');
-

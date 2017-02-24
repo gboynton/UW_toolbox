@@ -1,35 +1,38 @@
-function ang = pix2angle(display,pix)
-%angle = pix2angle(display,pix)
+function [ang] = pix2angle(display, pix)
+% [ang] = pix2angle(display, pix)
 %
-%converts monitor pixels into degrees of visual angle.
+% Converts monitor pixels into degrees of visual angle:
 %
-%Inputs:
-%display.dist (distance from screen (cm))
-%display.width (width of screen (cm))
-%display.resolution (number of pixels of display in horizontal direction)
+% ang = 2 * arctan(sz/(2*dist)) * (180/pi);
 %
-%ang (visual angle)
+% Inputs:
+%   display             A structure containing display information with 
+%                       fields:
+%       dist            Distance from screen, cm
+%       width           Width of screen, cm
+%       resolution      Screen resolution [width height], pixels
+% 
+%   pix                 Pixels to be converted to visual angles, pixels
 %
-%Warning: assumes isotropic (square) pixels
+% Output: 
+%   ang                 Converted 'pix' to visual angle, degrees
+%
+% Example:
+% display.dist = 60; % cm
+% display.width = 44.5; % cm
+% display.resolution = [1680 1050]; % pixels
+%
+% pix = 100; % pixel size to convert
+% ang = pix2angle(display, pix) % visual angles, degrees
+% 
+% Note:
+% - Warning: Assumes isotropic (square) pixels
 
-%Written 11/1/07 gmb zre
+% Written by G.M. Boynton & Zach Ernst - 11/1/07
+% Edited by Kelly Chang - February 23, 2017
 
-%Calculate pixel size
-pixSize = display.width/display.resolution(1);   %cm/pix
+%% Convert Pixels to Visual Angels
 
-sz = pix*pixSize;  %cm (duh)
-
-ang = 2*180*atan(sz/(2*display(1).dist))/pi;
-
-
-return
-
-%test code
-
-display.dist = 60; %cm
-display.width = 44.5; %cm
-display.resolution = [1680,1050];
-
-pix = 100;
-
-ang = pix2angle(display,pix)
+pixSize = display.width / display.resolution(1); % cm/pix
+sz = pix * pixSize; % cm
+ang = 2*atan(sz/(2*display.dist))*(180/pi); % visual angle, degrees
