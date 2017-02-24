@@ -46,7 +46,7 @@ function h=plotPsycho(results, funName, params, logFlag, plotStruct)
 %% Input Control & Error Control
 
 if strcmp('normcdf', funName)
-    funName='NormCDFS2P'; % conversion function, changes input from structure to list of parameters
+    funName='normcdfS2P'; % conversion function, changes input from structure to list of parameters
 end
 
 if ~exist('results', 'var')
@@ -67,7 +67,7 @@ if exist('params', 'var') && ~isempty(params)
     if ~isfield(params, 'b') error('slope parameter b is not defined');end
     if ~isfield(params, 'g') params.g=0.5;end% chance performance, only used for Weibill function
     if ~isfield(params, 'e') params.e=(0.5)^(1/3);  end
-end% the  performance level which you consider threshold ~80 for (0.5)^(1/3), only used for Weibull
+end% the  performance level which you consider threshold ~80 for (0.5)^(1/3), only used for weibull
 
 if exist('params', 'var') && ~exist('funName', 'var')
     error('''params'' structure specified without ''funName''');
