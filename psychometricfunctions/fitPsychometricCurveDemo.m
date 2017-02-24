@@ -13,7 +13,7 @@ pS.MarkerScale=0; % whether the marker scales with the number of data points
 
 logFlag=0;
 
-funName = 'normcdf'; % psychometric function name to be fitted, weibull or normcdf
+funName = 'weibull'; % psychometric function name to be fitted, weibull or normcdf
 
 % load example psychometric data
 load resultsStaircase.mat % 'results' structure
@@ -31,14 +31,14 @@ xlabel('Stimuli Intensity Levels');
 title('Results');
 
 %%
-% Let's try fitting a Weibull function to the psychometric data and
+% Let's try fitting a weibull function to the psychometric data and
 % calculate the error with the maximum log likihood
 
 % initial parameters for psychometric function
 pInit.b = 1; % slope
 pInit.t = 0.2; % stimuli intensity at threshold
-pInit.g = 0.5; % chance performance, only used for Weibull function, defaults to 0.5 if unspecified
-pInit.e = (0.5)^(1/3); % the  performance level which you consider threshold ~80 for (0.5)^(1/3), only used for Weibull
+%pInit.g = 0.5; % chance performance, only used for weibull function, defaults to 0.5 if unspecified
+%pInit.e = (0.5)^(1/3); % the  performance level which you consider threshold ~80 for (0.5)^(1/3), only used for weibull
 
 % calculate the maximum log-likelihood with the initial parameters
 initErr = fitPsychometricFunction(pInit, results, funName);
@@ -51,11 +51,11 @@ title(sprintf('Initial %s Fit\nb = %5.4f, t = %5.4f\nError = %5.4f', ...
     funName, pInit.b, pInit.t, initErr));
 
 % You can play around with the parameters that initially go into the
-% Weibull fit to see if you can minimize the error manually
+% weibull fit to see if you can minimize the error manually
 
 %%
-% Alternatively, we can fit the Weibull a nonlinear minization seach by
-% calling fit.m. Usually when fitting the Weibull, the slope (b) and stimuli
+% Alternatively, we can fit the weibull a nonlinear minization seach by
+% calling fit.m. Usually when fitting the weibull, the slope (b) and stimuli
 % intensity at threshold (t) are the parameters allowed to vary when
 % fitting. We'll call fit with the initial parameters as seeds
 
