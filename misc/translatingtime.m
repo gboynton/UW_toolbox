@@ -1,11 +1,11 @@
 function [es, rat, ferret, human]=translatingtime(days, species, pflag)
-%
-% TRANSLATINGTIME implements the Workman translating time model to translate time across
-% species
-% http://www.translatingtime.net/
-% TRANLATINGTIME(days, species, pflag) 
-% Note that the Workman model has interaction terms that aren't
-% implemented, so these numbers will be WRONG for cortical neurogenesis in
+%   TRANLATINGTIME(DAYS, SPECIES, PFLAG) 
+%   TRANSLATINGTIME implements the Workman translating time model to translate time across
+%   species
+%   http://www.translatingtime.net/
+%   TRANLATINGTIME(days, species, pflag) 
+%   Note that the Workman model has interaction terms that aren't
+%   implemented, so these numbers will be WRONG for cortical neurogenesis in
 % or anything to do with cat retina.
 % Input:
 %       days: (postconception or postnatal) for the input species
