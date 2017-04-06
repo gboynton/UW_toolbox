@@ -2,8 +2,7 @@ function [var] = params2var(params, freeList)
 % [var] = params2var(params, freeList)
 %
 % Extracts 'freeList' fields from 'params' structure and outputs into a row
-% vector 'var'. 'freeList' values in 'params' can only be length of 1. 
-% Support function for 'fit.m'
+% vector 'var'. Support function for 'fit.m'
 % 
 % Inputs:
 %   params      A structure of parameter values with field names that
@@ -25,18 +24,21 @@ if ischar(freeList)
     freeList = {freeList};
 end
 
-if ~all(ismember(freeList, fieldnames(params)))
-    errFlds = setdiff(fieldnames(params), freeList);
+varStr = regexprep(freeList, '(\(.*\))', '');
+numList = cellfun(@(x) regexprep(x,'[()]',''), regexp(freeList, '(\(.*\))', 'match'), 'UniformOutput', false);
+if ~all(ismember(varStr, fieldnames(params)))
+    errFlds = setdiff(fieldnames(params), varStr);
     error('Unknown ''freeList'' parameters: %s', strjoin(errFlds, ', '));
-end
-
-if ~all(structfun(@length, rmfield(params,setdiff(fieldnames(params),freeList))) == 1)
-    error('All params.(freeList) values must be a length of 1');
 end
 
 %% Extract 'freeList' Fields from 'params'
 
-var = NaN(1, length(freeList));
-for i = 1:length(freeList)
-  var(i) = params.(freeList{i});
+var = cell(1,length(varStr));
+for i = 1:length(varStr)
+    if isempty(numList{i})
+        var{i} = params.(varStr{i});
+    else
+        var{i} = params.(varStr{i})(str2num(char(numList{i})));
+    end
 end
+var = cell2mat(var);

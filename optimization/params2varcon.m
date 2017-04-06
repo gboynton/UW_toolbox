@@ -59,8 +59,16 @@ for i = 1:length(freeList)
             order = {'str2num(token{i}.l)' 'str2num(token{i}.r)' 'token{i}.m'};
         end
     end
-    lb(i) = eval(order{1});
-    ub(i) = eval(order{2});
     varStr{i} = eval(order{3});
-    var(i) = params.(varStr{i});
+    numOrder = cellfun(@(x) regexprep(x,'[()]',''), regexp(varStr{i}, '(\(.*\))', 'match'));
+    if isempty(numOrder)
+        var{i} = params.(regexprep(varStr{i},'(\(.*\))',''));
+    else
+        var{i} = params.(regexprep(varStr{i},'(\(.*\))',''))(str2num(numOrder));
+    end
+    lb{i} = repmat(eval(order{1}),1,length(var{i}));
+    ub{i} = repmat(eval(order{2}),1,length(var{i}));
 end
+lb = cell2mat(lb);
+ub = cell2mat(ub);
+var = cell2mat(var);
