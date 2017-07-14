@@ -60,11 +60,12 @@ for i = 1:length(freeList)
         end
     end
     varStr{i} = eval(order{3});
-    numOrder = cellfun(@(x) regexprep(x,'[()]',''), regexp(varStr{i}, '(\(.*\))', 'match'));
+    numOrder = cellfun(@(x) regexprep(x,'[()]',''), ...
+        regexp(varStr{i}, '(\(.*\))', 'match'), 'UniformOutput', false);
     if isempty(numOrder)
         var{i} = params.(regexprep(varStr{i},'(\(.*\))',''));
     else
-        var{i} = params.(regexprep(varStr{i},'(\(.*\))',''))(str2num(numOrder));
+        var{i} = params.(regexprep(varStr{i},'(\(.*\))',''))(str2num(numOrder{1}));
     end
     lb{i} = repmat(eval(order{1}),1,length(var{i}));
     ub{i} = repmat(eval(order{2}),1,length(var{i}));
